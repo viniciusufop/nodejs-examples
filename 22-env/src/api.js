@@ -10,7 +10,9 @@
 // servidores gratuitos para ultima parte
 // mongo -> https://cloud.mongodb.com/v2/6590805df262625f98034392#/clusters/detail/heroes
 // postgres -> https://dashboard.render.com/d/dpg-cm888ra1hbls73avrjv0-a
-// 
+// server -> https://dashboard.render.com/web/srv-cm88vigcmk4c73911l4g/deploys/dep-cm890vud3nmc73av8m70
+// url de test -> https://node-heroes-example.onrender.com/documentation
+
 const { config } = require('dotenv')
 const { join } = require('path')
 const { ok } = require('assert')
