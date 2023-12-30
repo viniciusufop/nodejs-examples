@@ -1,0 +1,50 @@
+version: '3.1'
+services:
+  postgres:
+    image: postgres
+    restart: always
+    volumes:
+      - ./tmp/db:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: testuser
+      POSTGRES_PASSWORD: testuser123
+      POSTGRES_DB: heroes
+    ports:
+      - "5432:5432"
+    networks:
+      - test-default
+  adminer:
+    image: adminer
+    restart: always
+    links:
+      - postgres
+    ports:
+      - "8080:8080"
+    networks:
+      - test-default
+  mongo:
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin123
+      MONGO_INITDB_DATABASE: heroes
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./docker-entrypoint-initdb.d/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+      - ./tmp/mongo:/etc/mongo
+    networks:
+      - test-default
+  mongoclient:
+    image: mongoclient/mongoclient
+    restart: always
+    links:
+      - mongo
+    ports:
+      - 3000:3000
+    networks:
+      - test-default
+networks:
+  test-default:
+    driver: bridge

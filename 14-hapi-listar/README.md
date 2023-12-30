@@ -1,0 +1,1 @@
+# A configuracao do curso foi com docker puro, eu mudei para usar o docker compose.
