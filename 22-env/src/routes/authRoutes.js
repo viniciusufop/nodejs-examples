@@ -64,6 +64,44 @@ class AuthRoute extends BaseRoute{
             }
         }
     }
+
+    cadastrar() {
+        return {
+            path: '/cadastrar',
+            method: 'POST',
+            options: {
+                auth: false,
+                tags: ['api'],
+                description: 'criar login',
+                notes: "criar login com user e senha",
+                validate: {
+                    // payload -> body
+                    // headers -> header
+                    // params -> URL :id
+                    // query -> query params
+                    failAction,
+                    payload: Joi.object({
+                        username: Joi.string().min(3).max(100).required(),
+                        password: Joi.string().min(3).max(100).required(),
+                    })
+                }
+            },
+            handler: async (request, head) => {
+                try {
+                    const {username, password} = request.payload
+                    const [user] = await this.db.read({username})
+                    if(user) return Boom.badRequest('Username exists')
+                    
+                    const hash = await PasswordHelper.hashPassword(password)
+                    await this.db.create({username, password:hash})
+                    return { 'message': 'User criado com sucesso' }
+                } catch (error) {
+                    console.log('DEU error', error)
+                    return Boom.internal()
+                }
+            }
+        }
+    }
 }
 
 module.exports = AuthRoute
