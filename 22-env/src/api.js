@@ -6,6 +6,8 @@
 // npm install bcrypt <-- criptografia para senhas
 // npm install dotenv <-- diferente enviroments
 // npm i -g cross-env <-- mudando ambiente de execucao com o cross-env NODE_ENV=prod npm test
+// npm i --save-dev nyc 
+// npm i istanbul <-- cobertura de codigo
 
 // servidores gratuitos para ultima parte
 // mongo -> https://cloud.mongodb.com/v2/6590805df262625f98034392#/clusters/detail/heroes
@@ -39,6 +41,7 @@ const Postgres = require('./db/strategies/postgres/postgres')
 const UserSchema = require('./db/strategies/postgres/schemas/userSchemas')
 const HeroRoute = require('./routes/heroesRoutes')
 const AuthRoute = require('./routes/authRoutes')
+const UtilRoute = require('./routes/utilRoutes')
 
 const JWT_SECRET = process.env.JWT_KEY
 const app = new Hapi.Server({
@@ -94,7 +97,9 @@ async function main() {
 
     app.route([
         ...mapRoutes(new HeroRoute(context), HeroRoute.methods()),
-        ...mapRoutes(new AuthRoute(JWT_SECRET, postgresContext), AuthRoute.methods())
+        ...mapRoutes(new AuthRoute(JWT_SECRET, postgresContext), AuthRoute.methods()),
+        ...mapRoutes(new UtilRoute(JWT_SECRET, postgresContext), UtilRoute.methods())
+        
     ])
     await app.start()
     console.log('App rodando na porta ', app.info.port)

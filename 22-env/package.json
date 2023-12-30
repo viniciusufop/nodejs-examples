@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "preinstall": "npm i -g pm2 && pm2 link n5on6zlycpixomv dn2ob6ibzn9ztx4",
-    "test": "mocha src/tests/*.js",
+    "postinstall": "npm run test:prod",
+    "test": "nyc --reporter=html mocha --exit src/tests/*.js",
     "test:watch": "mocha src/tests/*.js -w",
     "test:prod": "cross-env NODE_ENV=prod npm t",
     "prod": "cross-env NODE_ENV=prod pm2 start src/api.js"
@@ -23,6 +24,7 @@
     "dotenv": "^16.3.1",
     "hapi-auth-jwt2": "^10.5.0",
     "hapi-swagger": "^17.2.0",
+    "istanbul": "^0.4.5",
     "joi": "^17.11.0",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.0.3",
@@ -32,6 +34,7 @@
     "sequelize": "^6.35.2"
   },
   "devDependencies": {
-    "mocha": "^10.2.0"
+    "mocha": "^10.2.0",
+    "nyc": "^15.1.0"
   }
 }
